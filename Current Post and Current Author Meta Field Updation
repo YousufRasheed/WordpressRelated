@@ -1,0 +1,18 @@
+add_filter('the_content','view_counter');
+// Function
+function view_counter($content) {
+    if ( is_singular('recipes')) {
+        // Current Post ID
+        $post_id = get_the_ID();
+        // Current Post Author ID
+		    $author_id = get_post_field( 'post_author', $post_id );
+        // Post Meta Field Updation
+        $meta_values = get_post_meta( get_the_ID(), "recipe_views", true);
+		    //$new_recipe_views = (int)$meta_values + 1.0;
+        update_post_meta( get_the_ID(), 'recipe_views', (int)$meta_values+1);
+        // User Meta Field Updation
+        $current_earnings = get_user_meta($author_id, 'total-earnings', true);
+        $current_earnings = (int)$current_earnings + 1;
+        update_user_meta($author_id, 'total-earnings', $current_earnings);
+    }
+}
